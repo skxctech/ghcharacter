@@ -72,4 +72,12 @@ class DbHelper {
     return result;
   }
 
+  Future<int> getCount() async {
+    Database db = await this.db;
+    var result = Sqflite.firstIntValue(
+      await db.rawQuery("select count (*) from $tblCharacter")
+    );
+    return result;
+  }
+
 }

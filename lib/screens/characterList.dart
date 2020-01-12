@@ -17,15 +17,13 @@ class CharacterListState extends State {
 
   @override
   Widget build(BuildContext context) {
+
+    debugPrint('build from charList called ' + DateTime.now().toString());
+
     if (characters == null) {
       characters = List<Character>();
       getData();
     }
-
-    // final dbFuture = dbHelper.initializeDb();
-    // dbFuture.then((result) {
-    //   dbHelper.insertCharacter(new Character('Ion', PlayableClass.Brute.toShortString(), 499, 20));
-    // });
 
     return Scaffold(
       appBar: AppBar(title: Text('Character List')),
