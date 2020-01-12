@@ -40,6 +40,7 @@ class StartScreen extends StatelessWidget {
                   margin: EdgeInsets.only(top: 100.0),
                   child: Center(
                     child: OutlineButton.icon(
+                      textColor: Colors.white,
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -49,9 +50,8 @@ class StartScreen extends StatelessWidget {
                       borderSide: BorderSide(color: Colors.white),
                       icon: Icon(
                         Icons.add,
-                        color: Colors.white
                       ),
-                      label: Text('Create character', style: TextStyle(color: Colors.white),),
+                      label: Text('Create character',),
                     ),
                   ),
                 ),
