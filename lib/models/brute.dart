@@ -1,7 +1,8 @@
+import 'package:ghcharacter/enums/playableClass.dart';
 import 'package:ghcharacter/models/character.dart';
 
 class Brute extends Character {
-  Brute(String name, String playableClass, int xp, int gold) : super(name, playableClass, xp, gold);
+  Brute(String name, int xp, int gold) : super(name, 'Brute', xp, gold);
 
   int get maxHp {
     if (this.level == 1) {

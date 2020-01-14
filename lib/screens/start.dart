@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ghcharacter/models/character.dart';
-import 'package:ghcharacter/screens/characterDetail.dart';
 import 'package:ghcharacter/screens/characterList.dart';
 import 'package:ghcharacter/utils/dbhelper.dart';
 
@@ -9,16 +7,19 @@ DbHelper dbHelper = DbHelper();
 class StartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-     return Scaffold(
+    return Scaffold(
       backgroundColor: Colors.black,
       body: Container(
         constraints: BoxConstraints.expand(),
         decoration: BoxDecoration(
           image: DecorationImage(
-              image: AssetImage('assets/images/tinkerer.jpg'),
-              fit: BoxFit.cover,
-              colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.5), BlendMode.overlay)),
+            image: AssetImage('assets/images/tinkerer.jpg'),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(0.5),
+              BlendMode.overlay,
+            ),
+          ),
         ),
         child: Padding(
           padding: EdgeInsets.all(15.0),
@@ -44,14 +45,17 @@ class StartScreen extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => CharacterList()),
+                          MaterialPageRoute(
+                              builder: (context) => CharacterList()),
                         );
                       },
                       borderSide: BorderSide(color: Colors.white),
                       icon: Icon(
                         Icons.add,
                       ),
-                      label: Text('Create character',),
+                      label: Text(
+                        'Create character',
+                      ),
                     ),
                   ),
                 ),
