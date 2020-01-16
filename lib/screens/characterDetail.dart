@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:ghcharacter/models/character.dart';
 import 'package:ghcharacter/enums/playableClass.dart';
 import 'package:ghcharacter/utils/dbhelper.dart';
-import 'package:intl/intl.dart';
 
 DbHelper dbHelper = DbHelper();
 
@@ -36,6 +35,7 @@ class CharacterDetailState extends State {
 
   @override
   Widget build(BuildContext context) {
+
     nameController.text = character.name;
     xpController.text = character.xp.toString();
     goldController.text = character.gold.toString();
@@ -75,6 +75,7 @@ class CharacterDetailState extends State {
             ),
             TextField(
               controller: xpController,
+              keyboardType: TextInputType.number,
               onChanged: (value) => this.updateXp(),
               decoration: InputDecoration(
                 labelText: "Experience",
@@ -85,6 +86,7 @@ class CharacterDetailState extends State {
             ),
             TextField(
               controller: goldController,
+              keyboardType: TextInputType.number,
               onChanged: (value) => this.updateGold(),
               decoration: InputDecoration(
                 labelText: "Gold",

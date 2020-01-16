@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ghcharacter/screens/characterList.dart';
+import 'package:ghcharacter/models/character.dart';
 import 'package:ghcharacter/utils/dbhelper.dart';
 
 DbHelper dbHelper = DbHelper();
@@ -7,6 +7,9 @@ DbHelper dbHelper = DbHelper();
 class StartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+    Future<List> _count = dbHelper.getCharacters();
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: Container(
@@ -40,22 +43,22 @@ class StartScreen extends StatelessWidget {
                 Container(
                   margin: EdgeInsets.only(top: 100.0),
                   child: Center(
-                    child: OutlineButton.icon(
-                      textColor: Colors.white,
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CharacterList()),
-                        );
-                      },
-                      borderSide: BorderSide(color: Colors.white),
-                      icon: Icon(
-                        Icons.add,
-                      ),
-                      label: Text(
-                        'Create character',
-                      ),
+                    child: FutureBuilder<List> (
+                      future: _count,
+                      builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
+
+                        Widget row = Text('loading...'); 
+
+                        if(snapshot.hasData) {
+                          if(snapshot.data.length > 0) {
+                            row = this.getCharactersList(snapshot.data);
+                          } else {
+                            row = this.getCreationList();
+                          }
+                        }
+
+                        return row;
+                      }
                     ),
                   ),
                 ),
@@ -66,4 +69,34 @@ class StartScreen extends StatelessWidget {
       ),
     );
   }
+
+  getCharactersList(data) {
+    
+    List<Character> characterList = data.map<Character>(
+      (characterData) => Character.fromObject(characterData)
+    ).toList();
+
+    return new Row(children: characterList.map<Widget>((character) => 
+      new Text(character.name)
+    ).toList());
+
+  }
+  getCreationList() {
+
+    return Text('well');
+
+  }
 }
+
+
+//  final charactersFuture = dbHelper.getCharacters();
+//   charactersFuture.then((result) {
+//     List<Character> characterList = List<Character>();
+//     this.count = result.length;
+//     for (int i = 0; i < count; i++) {
+//       characterList.add(Character.fromObject(result[i]));
+//     }
+//     setState(() {
+//       this.characters = characterList;
+//       this.count = count;
+//     });

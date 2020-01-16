@@ -4,26 +4,39 @@ class Character {
   int id;
   String name;
   PlayableClass playableClass;
+  int hitpoints;
   int xp;
   int gold;
   int xpBase;
   int levelUpDifficulty;
+  int battleGoals;
+  int initiative;
 
   Character(
-    this.name, String _playableClass, 
-    this.xp, this.gold, 
+    this.name, 
+    String _playableClass, 
     {
+      this.hitpoints: 0,
+      this.xp: 0,
+      this.gold: 0,
       this.xpBase: 45, 
-      this.levelUpDifficulty: 5
+      this.levelUpDifficulty: 5,
+      this.battleGoals: 0,
+      this.initiative: 0
     }
   ) { playableClass = getPlayableClass(_playableClass); }
 
   Character.withId(
-    this.id, this.name, String _playableClass,
-    this.xp, this.gold,
+    this.id,
+    this.name, 
+    String _playableClass, 
     {
+      this.hitpoints: 0,
+      this.xp: 0,
+      this.gold: 0,
       this.xpBase: 45, 
-      this.levelUpDifficulty: 5
+      this.levelUpDifficulty: 5,
+      this.battleGoals: 0
     }
   ) { playableClass = getPlayableClass(_playableClass); }
 
@@ -33,6 +46,7 @@ class Character {
     this.playableClass = getPlayableClass(o["playableClass"]);
     this.xp = o["xp"];
     this.gold = o["gold"];
+    this.battleGoals = o["battleGoals"];
   }
 
   addGold(int amountToAdd) {
@@ -59,13 +73,17 @@ class Character {
     map['playableClass'] = playableClass.toShortString();
     map['xp'] = xp;
     map['gold'] = gold;
+    map['xpBase'] = xpBase;
+    map['levelUpDifficulty'] = levelUpDifficulty;
+    map['battleGoals'] = battleGoals;
+    map['initiative'] = initiative;
     if (id != null) {
       map['id'] = id;
     }
     return map;
   }
 
- // mad
+  // stupid?
   static PlayableClass getPlayableClass(String pcName) {
     switch(pcName) {
       case 'Brute':

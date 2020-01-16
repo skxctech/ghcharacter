@@ -18,8 +18,6 @@ class CharacterListState extends State {
   @override
   Widget build(BuildContext context) {
 
-    debugPrint('build from charList called ' + DateTime.now().toString());
-
     if (characters == null) {
       characters = List<Character>();
       getData();
@@ -30,7 +28,7 @@ class CharacterListState extends State {
       body: characterListItems(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          navigateToDetail(Character('', 'Brute', 0, 0));
+          navigateToDetail(Character('', 'Brute'));
         },
         tooltip: "Create character",
         child: new Icon(Icons.add),

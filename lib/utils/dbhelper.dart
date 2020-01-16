@@ -13,6 +13,10 @@ class DbHelper {
   String colPlayableClass = 'playableClass';
   String colXp = 'xp';
   String colGold = 'gold';
+  String colXpBase = 'xpBase';
+  String colLevelUpDifficulty = 'levelUpDifficulty';
+  String colBattleGoals = 'battleGoals';
+  String colInitiative = 'initiative';
 
   DbHelper._internal();
 
@@ -37,7 +41,17 @@ class DbHelper {
   }
 
   void _createDb(Database db, int newVersion) async {
-    await db.execute("CREATE TABLE $tblCharacter($colId INTEGER PRIMARY KEY, $colName TEXT, $colPlayableClass INTEGER, $colXp INTEGER, $colGold INTEGER)");
+    await db.execute("CREATE TABLE $tblCharacter(" + 
+      "$colId INTEGER PRIMARY KEY," + 
+      "$colName TEXT," + 
+      "$colPlayableClass INTEGER, " + 
+      "$colXp INTEGER, " + 
+      "$colGold INTEGER, " + 
+      "$colXpBase INTEGER, " +
+      "$colLevelUpDifficulty INTEGER, " +
+      "$colBattleGoals INTEGER, " +
+      "$colInitiative INTEGER" +
+    ")");
   }
 
   Future<int> insertCharacter(Character character) async {
@@ -49,7 +63,6 @@ class DbHelper {
   
   Future<int> updateCharacter(Character character) async {
     var db = await this.db;
-    var data = character.toMap();
     var result = await db.update(
       tblCharacter, 
       character.toMap(), 

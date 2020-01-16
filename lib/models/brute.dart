@@ -1,8 +1,52 @@
-import 'package:ghcharacter/enums/playableClass.dart';
 import 'package:ghcharacter/models/character.dart';
 
 class Brute extends Character {
-  Brute(String name, int xp, int gold) : super(name, 'Brute', xp, gold);
+
+  int hitpoints;
+  int xp;
+  int gold;
+  int battleGoals;
+
+  // fugly generation, but worth it to init custom stats per class
+  Brute(
+    String name,
+    {
+      this.xp: 0,
+      this.gold: 0,
+      this.battleGoals: 0,
+      this.hitpoints: 0
+    }
+  ) : super(
+      name, 
+      'Brute', 
+      hitpoints: hitpoints,
+      xp: xp, 
+      gold: gold, 
+      xpBase: 45, 
+      levelUpDifficulty: 5, 
+      battleGoals: battleGoals
+  );
+
+  Brute.withId(
+    int id,
+    String name,
+    {
+      this.xp: 0,
+      this.gold: 0,
+      this.battleGoals: 0,
+      this.hitpoints: 0
+    }
+  ) : super.withId(
+      id, 
+      name, 
+      'Brute', 
+      xp: xp, 
+      gold: gold,
+      hitpoints: hitpoints,
+      xpBase: 45, 
+      levelUpDifficulty: 5, 
+      battleGoals: battleGoals
+  );
 
   int get maxHp {
     if (this.level == 1) {
