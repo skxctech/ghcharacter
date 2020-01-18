@@ -7,10 +7,10 @@ class Character {
   int hitpoints;
   int xp;
   int gold;
-  int xpBase;
-  int levelUpDifficulty;
-  int battleGoals;
-  int initiative;
+  int xpBase = 45;
+  int levelUpDifficulty = 5;
+  int battleGoals = 0;
+  int initiative = 0;
 
   Character(
     this.name, 
@@ -19,10 +19,10 @@ class Character {
       this.hitpoints: 0,
       this.xp: 0,
       this.gold: 0,
-      this.xpBase: 45, 
-      this.levelUpDifficulty: 5,
-      this.battleGoals: 0,
-      this.initiative: 0
+      this.xpBase, 
+      this.levelUpDifficulty,
+      this.battleGoals,
+      this.initiative
     }
   ) { playableClass = getPlayableClass(_playableClass); }
 
@@ -34,9 +34,10 @@ class Character {
       this.hitpoints: 0,
       this.xp: 0,
       this.gold: 0,
-      this.xpBase: 45, 
-      this.levelUpDifficulty: 5,
-      this.battleGoals: 0
+      this.xpBase, 
+      this.levelUpDifficulty,
+      this.battleGoals,
+      this.initiative
     }
   ) { playableClass = getPlayableClass(_playableClass); }
 
@@ -44,9 +45,28 @@ class Character {
     this.id = o["id"];
     this.name = o["name"];
     this.playableClass = getPlayableClass(o["playableClass"]);
-    this.xp = o["xp"];
-    this.gold = o["gold"];
-    this.battleGoals = o["battleGoals"];
+    // TODO remove safety checks once DB structure is stable
+    if (o["xp"] != null) {
+      this.xp = o["xp"];
+    }
+    if (o["gold"] != null) {
+      this.gold = o["gold"];
+    }
+    if (o["battleGoals"] != null) {
+      this.battleGoals = o["battleGoals"];
+    }
+    if (o["levelUpDifficulty"] != null) {
+      this.levelUpDifficulty = o["levelUpDifficulty"];
+    }
+    if (o["xpBase"] != null) {
+      this.xpBase = o["xpBase"];
+    }
+    if (o["hitpoints"] != null) {
+      this.hitpoints = o["hitpoints"];
+    }
+    if (o["initiative"] != null) {
+      this.initiative = o["initiative"];
+    }
   }
 
   addGold(int amountToAdd) {
@@ -114,4 +134,5 @@ class Character {
         break;
     }
   }
+  
 }

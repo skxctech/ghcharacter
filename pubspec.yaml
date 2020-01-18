@@ -21,7 +21,7 @@ dependencies:
     sdk: flutter
   sqflite: any
   path_provider: any
-  intl: ^0.15.7
+  flutter_svg: ^0.15.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -47,6 +47,8 @@ flutter:
   assets:
    - assets/images/logo.png
    - assets/images/tinkerer.jpg
+   - assets/images/box-art-cropped.jpg
+   - assets/icons/classes/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -63,6 +65,14 @@ flutter:
     - family: PirataOne
       fonts:
         - asset: assets/fonts/PirataOne-Regular.ttf
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto-Regular.ttf
+    - family: RobotoCondensed
+      fonts:
+        - asset: assets/fonts/RobotoCondensed-Regular.ttf
+        - asset: assets/fonts/RobotoCondensed-Bold.ttf
+          weight: 700
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
