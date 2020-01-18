@@ -87,16 +87,3 @@ class StartScreen extends StatelessWidget {
 
   }
 }
-
-
-//  final charactersFuture = dbHelper.getCharacters();
-//   charactersFuture.then((result) {
-//     List<Character> characterList = List<Character>();
-//     this.count = result.length;
-//     for (int i = 0; i < count; i++) {
-//       characterList.add(Character.fromObject(result[i]));
-//     }
-//     setState(() {
-//       this.characters = characterList;
-//       this.count = count;
-//     });

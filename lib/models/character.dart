@@ -67,6 +67,10 @@ class Character {
     return level;
   }
 
+  String get icon {
+    return 'someAssetUrl' + this.playableClass.toShortString();
+  }
+
   Map<String, dynamic> toMap() {
     var map = Map<String, dynamic>();
     map['name'] = name;

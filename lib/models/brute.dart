@@ -21,7 +21,7 @@ class Brute extends Character {
       'Brute', 
       hitpoints: hitpoints,
       xp: xp, 
-      gold: gold, 
+      gold: gold,
       xpBase: 45, 
       levelUpDifficulty: 5, 
       battleGoals: battleGoals
