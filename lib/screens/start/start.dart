@@ -107,7 +107,8 @@ class StartScreenState extends State {
             controller: this.pageViewController,
             scrollDirection: Axis.horizontal,
             pageSnapping: true,
-            children: widgets);
+            children: widgets
+      );
 
       setState(() {
         this.content = pageView;
@@ -244,21 +245,16 @@ class StartScreenState extends State {
       );
     }).toList();
 
-    final content = Column(children: [
+    List<Widget> creationList = [
       Padding(
         padding: EdgeInsets.only(top: 40),
         child: StartScreenWrapper('Pick a class', 'No pressure'),
       ),
       Expanded(child: ListView(children: createCharacterWidget)),
-      this.getOptionalButton()
-    ]);
-
-    return content;
-  }
-
-  getOptionalButton() {
+    ];
+    
     if (!newUser) {
-      return OutlineButton.icon(
+      creationList.add(OutlineButton.icon(
         icon: Icon(Icons.arrow_back),
         textColor: Colors.white,
         borderSide: BorderSide(color: Colors.white),
@@ -267,8 +263,12 @@ class StartScreenState extends State {
         onPressed: () {
           this.pageViewController.animateToPage(0, duration: Duration(milliseconds: 500), curve: Curves.ease);
         },
-      );
+      ));
     }
+
+    final content = Column(children: creationList);
+
+    return content;
   }
 
   dismissCharacter(direction) {}
