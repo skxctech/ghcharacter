@@ -20,12 +20,9 @@ class StartScreenState extends State {
 
   String bgUrl = 'assets/images/box-art-cropped.jpg';
 
-  String characterBgUrl = 'assets/images/brute.jpg';
-
   List charactersData;
 
-  String screenTitle = '';
-  String screenSubtitle = '';
+  final pageViewController = PageController(initialPage: 0);
 
   Widget content = Center(
       child: Icon(
@@ -85,10 +82,7 @@ class StartScreenState extends State {
                       child: Image.asset('assets/images/logo.png'),
                     ),
                   ),
-                  Expanded(
-                    flex: 2,
-                    child: this.content,
-                  ),
+                  Expanded(flex: 2, child: this.content),
                 ]),
           ),
         ),
@@ -99,13 +93,25 @@ class StartScreenState extends State {
   init() {
     dbHelper.getCharacters().then((characterList) {
       this.initialized = true;
+
+      List<Widget> widgets = [];
+
       if (characterList.length > 0) {
         this.charactersData = characterList;
         this.newUser = false;
-        this.renderCharacterSelection();
-      } else {
-        this.renderCharacterCreation();
+        widgets.add(this.renderCharacterSelection());
       }
+      widgets.add(this.renderCharacterCreation());
+
+      final pageView = PageView(
+            controller: this.pageViewController,
+            scrollDirection: Axis.horizontal,
+            pageSnapping: true,
+            children: widgets);
+
+      setState(() {
+        this.content = pageView;
+      });
     });
   }
 
@@ -169,13 +175,13 @@ class StartScreenState extends State {
       children: [
         Expanded(child: charactersList),
         OutlineButton.icon(
-          icon: Icon(Icons.add_circle),
+          icon: Icon(Icons.arrow_forward),
           textColor: Colors.white,
           borderSide: BorderSide(color: Colors.white),
           highlightedBorderColor: Colors.orangeAccent,
           label: Text('New Character'),
           onPressed: () {
-            this.renderCharacterCreation();
+            this.pageViewController.animateToPage(1, duration: Duration(milliseconds: 500), curve: Curves.ease);
           },
         )
       ],
@@ -183,15 +189,13 @@ class StartScreenState extends State {
 
     final content = Column(children: [
       Padding(
-        padding: EdgeInsets.only(top: 60),
+        padding: EdgeInsets.only(top: 40),
         child: StartScreenWrapper('Your Characters', 'Were where we?'),
       ),
       Expanded(child: yourCharactersWidget)
     ]);
 
-    setState(() {
-      this.content = content;
-    });
+    return content;
   }
 
   renderCharacterCreation() {
@@ -208,7 +212,9 @@ class StartScreenState extends State {
       return Material(
         color: Colors.black.withOpacity(0),
         child: InkWell(
-          onTap: () {this.openCreateScreen(className); },
+          onTap: () {
+            this.openCreateScreen(className);
+          },
           highlightColor: Colors.deepOrange,
           child: Padding(
             padding: EdgeInsets.all(10.0),
@@ -240,28 +246,26 @@ class StartScreenState extends State {
 
     final content = Column(children: [
       Padding(
-        padding: EdgeInsets.only(top: 60),
+        padding: EdgeInsets.only(top: 40),
         child: StartScreenWrapper('Pick a class', 'No pressure'),
       ),
       Expanded(child: ListView(children: createCharacterWidget)),
       this.getOptionalButton()
     ]);
 
-    setState(() {
-      this.content = content;
-    });
+    return content;
   }
 
   getOptionalButton() {
     if (!newUser) {
       return OutlineButton.icon(
-        icon: Icon(Icons.list),
+        icon: Icon(Icons.arrow_back),
         textColor: Colors.white,
         borderSide: BorderSide(color: Colors.white),
         highlightedBorderColor: Colors.orangeAccent,
         label: Text('Manage Characters'),
         onPressed: () {
-          this.renderCharacterSelection();
+          this.pageViewController.animateToPage(0, duration: Duration(milliseconds: 500), curve: Curves.ease);
         },
       );
     }
@@ -270,6 +274,7 @@ class StartScreenState extends State {
   dismissCharacter(direction) {}
 
   openCreateScreen(String className) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => CreateCharacter(className)));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => CreateCharacter(className)));
   }
 }
