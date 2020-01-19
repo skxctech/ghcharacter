@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ghcharacter/screens/start.dart';
+import 'package:ghcharacter/screens/start/start.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         fontFamily: 'Roboto',
-        accentColor: Colors.orangeAccent
+        accentColor: Colors.deepOrange
       ),
       home: StartScreen(),
     );
