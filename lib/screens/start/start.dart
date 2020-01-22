@@ -20,17 +20,10 @@ class StartScreenState extends State {
 
   String bgUrl = 'assets/images/box-art-cropped.jpg';
 
-  List charactersData;
+  int count = 0;
+  List<Character> characters = [];
 
   final pageViewController = PageController(initialPage: 0);
-
-  Widget content = Center(
-      child: Icon(
-    Icons.loop,
-    color: Colors.white,
-    size: 24.0,
-    semanticLabel: 'Loading...',
-  ));
 
   bool initialized = false;
 
@@ -82,7 +75,81 @@ class StartScreenState extends State {
                       child: Image.asset('assets/images/logo.png'),
                     ),
                   ),
-                  Expanded(flex: 2, child: this.content),
+                  Expanded(
+                    flex: 2,
+                    child: PageView(
+                      controller: this.pageViewController,
+                      scrollDirection: Axis.horizontal,
+                      pageSnapping: true,
+                      children: <Widget>[
+                        this.renderCharacterCreation(),
+                        Column(children: [
+                          Padding(
+                            padding: EdgeInsets.only(top: 40),
+                            child: StartScreenWrapper(
+                                'Your Characters', 'Were where we?'),
+                          ),
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: this.count,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Padding(
+                                  padding: EdgeInsets.all(10.0),
+                                  child: Row(
+                                    children: [
+                                      SvgPicture.asset(
+                                          'assets/icons/classes/${this.characters[index].playableClass.toShortString().toLowerCase()}.svg'),
+                                      Expanded(
+                                        child: Container(
+                                          margin: EdgeInsets.only(left: 10.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                this.characters[index].name,
+                                                style: TextStyle(
+                                                    fontFamily:
+                                                        'RobotoCondensed',
+                                                    color: Colors.white,
+                                                    fontSize: 22),
+                                              ),
+                                              Text(
+                                                'Level ${this.characters[index].level.toString()} ${this.characters[index].playableClass.toShortString()}',
+                                                style: TextStyle(
+                                                    fontFamily: 'Roboto',
+                                                    color: Colors.white
+                                                        .withOpacity(0.75),
+                                                    fontSize: 14),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Material(
+                                        color: Colors.transparent,
+                                        child: Center(
+                                          child: Ink(
+                                            child: IconButton(
+                                              icon: Icon(Icons.delete),
+                                              color: Colors.white,
+                                              onPressed: () {
+                                                this.deleteCharacter(this.characters[index], index);
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                          )
+                        ]),
+                      ],
+                    ),
+                  ),
                 ]),
           ),
         ),
@@ -93,110 +160,26 @@ class StartScreenState extends State {
   init() {
     dbHelper.getCharacters().then((characterList) {
       this.initialized = true;
-
-      List<Widget> widgets = [];
-
       if (characterList.length > 0) {
-        this.charactersData = characterList;
         this.newUser = false;
-        widgets.add(this.renderCharacterSelection());
+        this.getCharacters();
       }
-      widgets.add(this.renderCharacterCreation());
-
-      final pageView = PageView(
-            controller: this.pageViewController,
-            scrollDirection: Axis.horizontal,
-            pageSnapping: true,
-            children: widgets
-      );
-
-      setState(() {
-        this.content = pageView;
-      });
     });
   }
 
-  renderCharacterSelection() {
-    final characters = this.charactersData.map<Widget>((characterData) {
-      final character = Character.fromObject(characterData);
-
-      final classIconUrl =
-          'assets/icons/classes/${character.playableClass.toShortString().toLowerCase()}.svg';
-
-      return Dismissible(
-        direction: DismissDirection.endToStart,
-        background: Container(
-          color: Colors.red.withOpacity(0.5),
-          child: Padding(
-            padding: EdgeInsets.only(left: 20.0, right: 20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [Icon(Icons.delete, color: Colors.white, size: 30.0)],
-            ),
-          ),
-        ),
-        key: Key(character.id.toString()),
-        onDismissed: this.dismissCharacter,
-        child: Padding(
-          padding: EdgeInsets.all(10.0),
-          child: Row(
-            children: [
-              SvgPicture.asset(classIconUrl),
-              Container(
-                margin: EdgeInsets.only(left: 10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      character.name,
-                      style: TextStyle(
-                          fontFamily: 'RobotoCondensed',
-                          color: Colors.white,
-                          fontSize: 22),
-                    ),
-                    Text(
-                      'Level ${character.level.toString()} ${character.playableClass.toShortString()}',
-                      style: TextStyle(
-                          fontFamily: 'Roboto',
-                          color: Colors.white.withOpacity(0.75),
-                          fontSize: 14),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    }).toList();
-
-    final ListView charactersList = ListView(children: characters);
-
-    final yourCharactersWidget = Column(
-      children: [
-        Expanded(child: charactersList),
-        OutlineButton.icon(
-          icon: Icon(Icons.arrow_forward),
-          textColor: Colors.white,
-          borderSide: BorderSide(color: Colors.white),
-          highlightedBorderColor: Colors.orangeAccent,
-          label: Text('New Character'),
-          onPressed: () {
-            this.pageViewController.animateToPage(1, duration: Duration(milliseconds: 500), curve: Curves.ease);
-          },
-        )
-      ],
-    );
-
-    final content = Column(children: [
-      Padding(
-        padding: EdgeInsets.only(top: 40),
-        child: StartScreenWrapper('Your Characters', 'Were where we?'),
-      ),
-      Expanded(child: yourCharactersWidget)
-    ]);
-
-    return content;
+  getCharacters() {
+    dbHelper.getCharacters().then((characterList) {
+      if (characterList.length > 0) {
+        setState(() {
+          this.count = characterList.length;
+          this.characters = characterList.map((characterData) {
+            return Character.fromObject(characterData);
+          }).toList();
+        });
+        this.pageViewController.animateToPage(1,
+            duration: Duration(milliseconds: 500), curve: Curves.ease);
+      }
+    });
   }
 
   renderCharacterCreation() {
@@ -252,29 +235,60 @@ class StartScreenState extends State {
       ),
       Expanded(child: ListView(children: createCharacterWidget)),
     ];
-    
-    if (!newUser) {
-      creationList.add(OutlineButton.icon(
-        icon: Icon(Icons.arrow_back),
-        textColor: Colors.white,
-        borderSide: BorderSide(color: Colors.white),
-        highlightedBorderColor: Colors.orangeAccent,
-        label: Text('Manage Characters'),
-        onPressed: () {
-          this.pageViewController.animateToPage(0, duration: Duration(milliseconds: 500), curve: Curves.ease);
-        },
-      ));
-    }
 
     final content = Column(children: creationList);
 
     return content;
   }
 
-  dismissCharacter(direction) {}
-
-  openCreateScreen(String className) {
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => CreateCharacter(className)));
+   deleteCharacter(Character character, int index) async {
+    if (await this.confirmDelete(character)) {
+      dbHelper.deleteCharacter(character.id).then((res) {
+        this.getCharacters();
+      });
+    }
   }
+
+  openCreateScreen(String className) async {
+    final res = await Navigator.push(context,
+        MaterialPageRoute(builder: (context) => CreateCharacter(className)));
+
+    if (res) {
+      this.getCharacters();
+    }
+  }
+
+  Future<bool> confirmDelete(Character character) async {
+    return showDialog(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Are you sure you want to delete this character?'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('${character.name} the ${character.playableClass.toShortString()} will be gone.')
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Yes'),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
+            FlatButton(
+              child: Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
+
 }

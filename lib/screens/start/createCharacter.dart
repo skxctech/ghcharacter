@@ -20,7 +20,9 @@ class CreateCharacterState extends State {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return WillPopScope(
+      onWillPop: () => scopePop(),
+      child:Container(
       constraints: BoxConstraints.expand(),
       decoration: BoxDecoration(
         image: DecorationImage(
@@ -78,7 +80,7 @@ class CreateCharacterState extends State {
                         highlightedBorderColor: Colors.orangeAccent,
                         label: Text('Create Character'),
                         onPressed: () {
-                          this.createCharacter(context);
+                          this.createCharacter();
                         },
                       ),
                     ]),
@@ -87,14 +89,18 @@ class CreateCharacterState extends State {
           ),
         ),
       ),
-    );
+    ),);
   }
 
-  createCharacter(ctx) {
+  scopePop() {
+    Navigator.pop(this.context, false);
+  }
+
+  createCharacter() {
     final char = Character(this.nameController.text, this.playableClass);
 
     dbHelper.insertCharacter(char).then((data) {
-      Navigator.pop(ctx);
+      Navigator.pop(this.context, true);
     });
   }
 }
