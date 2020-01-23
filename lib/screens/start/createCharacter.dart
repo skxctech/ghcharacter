@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ghcharacter/utils/dbhelper.dart';
 import 'package:ghcharacter/models/character.dart';
+import 'package:ghcharacter/screens/start/startScreenWrapper.dart';
 
 DbHelper dbHelper = DbHelper();
 
@@ -68,6 +69,10 @@ class CreateCharacterState extends State {
                   Expanded(
                     flex: 2,
                     child: Column(children: [
+                       Hero(
+                    tag: 'createHero',
+                    child: StartScreenWrapper('Create Character', 'Enter name'),
+                       ),
                       Padding(
                           padding: EdgeInsets.only(top: 150.0),
                           child: TextField(

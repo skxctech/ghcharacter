@@ -134,7 +134,9 @@ class StartScreenState extends State {
                                               icon: Icon(Icons.delete),
                                               color: Colors.white,
                                               onPressed: () {
-                                                this.deleteCharacter(this.characters[index], index);
+                                                this.deleteCharacter(
+                                                    this.characters[index],
+                                                    index);
                                               },
                                             ),
                                           ),
@@ -145,6 +147,23 @@ class StartScreenState extends State {
                                 );
                               },
                             ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Icon(
+                                Icons.keyboard_arrow_left,
+                                color: Colors.white.withOpacity(0.5),
+                                size: 18,
+                              ),
+                              Text(
+                                'create new character',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white.withOpacity(0.5),
+                                ),
+                              ),
+                            ],
                           )
                         ]),
                       ],
@@ -231,9 +250,29 @@ class StartScreenState extends State {
     List<Widget> creationList = [
       Padding(
         padding: EdgeInsets.only(top: 40),
-        child: StartScreenWrapper('Pick a class', 'No pressure'),
+        child: Hero(
+          tag: 'createHero',
+          child: StartScreenWrapper('Create Character', 'Pick a class'),
+        ),
       ),
       Expanded(child: ListView(children: createCharacterWidget)),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            'your characters',
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.white.withOpacity(0.5),
+            ),
+          ),
+          Icon(
+            Icons.keyboard_arrow_right,
+            color: Colors.white.withOpacity(0.5),
+            size: 18,
+          )
+        ],
+      )
     ];
 
     final content = Column(children: creationList);
@@ -241,7 +280,7 @@ class StartScreenState extends State {
     return content;
   }
 
-   deleteCharacter(Character character, int index) async {
+  deleteCharacter(Character character, int index) async {
     if (await this.confirmDelete(character)) {
       dbHelper.deleteCharacter(character.id).then((res) {
         this.getCharacters();
@@ -268,7 +307,8 @@ class StartScreenState extends State {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('${character.name} the ${character.playableClass.toShortString()} will be gone.')
+                Text(
+                    '${character.name} the ${character.playableClass.toShortString()} will be gone.')
               ],
             ),
           ),
@@ -290,5 +330,4 @@ class StartScreenState extends State {
       },
     );
   }
-
 }
