@@ -1,15 +1,15 @@
 import 'package:ghcharacter/models/character.dart';
 
-class Brute extends Character {
+class Spellweaver extends Character {
 
   int hitpoints;
   int xp;
   int gold;
   int battleGoals;
-  static String description = 'What they lack in intelligence and sophistication, they make up with their superior strength and size, always eager to prove themselves in a challenge';
+  static String description = 'There are many physical threats to the Orchid society, and some are calld to join the ancient order of Spellweavers - Orchid sages who are able to draw forth powerful natural forces and craft them into concetrated attacks';
 
   // fugly generation, but worth it to init custom stats per class
-  Brute(
+  Spellweaver(
     String name,
     {
       this.xp: 0,
@@ -19,7 +19,7 @@ class Brute extends Character {
     }
   ) : super(
       name, 
-      'Brute', 
+      'Spellweaver', 
       hitpoints: hitpoints,
       xp: xp, 
       gold: gold,
@@ -28,7 +28,7 @@ class Brute extends Character {
       battleGoals: battleGoals
   );
 
-  Brute.withId(
+  Spellweaver.withId(
     int id,
     String name,
     {
@@ -40,7 +40,7 @@ class Brute extends Character {
   ) : super.withId(
       id, 
       name, 
-      'Brute', 
+      'Spellweaver', 
       xp: xp, 
       gold: gold,
       hitpoints: hitpoints,

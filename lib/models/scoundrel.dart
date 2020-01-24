@@ -1,15 +1,15 @@
 import 'package:ghcharacter/models/character.dart';
 
-class Brute extends Character {
+class Scoundrel extends Character {
 
   int hitpoints;
   int xp;
   int gold;
   int battleGoals;
-  static String description = 'What they lack in intelligence and sophistication, they make up with their superior strength and size, always eager to prove themselves in a challenge';
+  static String description = 'Scoundrels operate under the assumption taht everything in the world is theirs to take and they will do whatever is necessary to do the taking';
 
   // fugly generation, but worth it to init custom stats per class
-  Brute(
+  Scoundrel(
     String name,
     {
       this.xp: 0,
@@ -19,7 +19,7 @@ class Brute extends Character {
     }
   ) : super(
       name, 
-      'Brute', 
+      'Scoundrel', 
       hitpoints: hitpoints,
       xp: xp, 
       gold: gold,
@@ -28,7 +28,7 @@ class Brute extends Character {
       battleGoals: battleGoals
   );
 
-  Brute.withId(
+  Scoundrel.withId(
     int id,
     String name,
     {
@@ -40,7 +40,7 @@ class Brute extends Character {
   ) : super.withId(
       id, 
       name, 
-      'Brute', 
+      'Scoundrel', 
       xp: xp, 
       gold: gold,
       hitpoints: hitpoints,

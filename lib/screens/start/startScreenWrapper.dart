@@ -10,7 +10,9 @@ class StartScreenWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Text(
+        Material(
+          color: Colors.transparent,
+          child:Text(
           title,
           style: TextStyle(
               fontFamily: 'PirataOne',
@@ -23,7 +25,7 @@ class StartScreenWrapper extends StatelessWidget {
                   offset: Offset(1.0, 1.0),
                 ),
               ]),
-        ),
+        ),),
         Padding(
           padding: EdgeInsets.only(top: 7.0),
           child: Row(
@@ -35,16 +37,19 @@ class StartScreenWrapper extends StatelessWidget {
               )),
               Padding(
                 padding: EdgeInsets.only(left: 5.0, right: 5.0),
-                child: Text(
+                child: 
+                Material( 
+                  color: Colors.transparent,
+                  child: Text(
                   subtitle.toUpperCase(),
                   style: TextStyle(
                     fontFamily: 'RobotoCondensed',
                     fontWeight: FontWeight.w700,
-                    fontSize: 14,
+                    fontSize: 16,
                     color: Colors.white.withOpacity(0.5),
                     letterSpacing: 5,
                   ),
-                ),
+                ),),
               ),
               Expanded(
                   child: Container(

@@ -1,4 +1,5 @@
 import 'package:ghcharacter/enums/playableClass.dart';
+import 'package:ghcharacter/models/brute.dart';
 
 class Character {
   int id;
