@@ -189,7 +189,8 @@ class CreateCharacterState extends State {
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontFamily: 'HighTower',
-                                      fontSize: 16,
+                                      fontSize: 18,
+                                      height: 1.4,
                                     ),
                                   ),
                                 ),
