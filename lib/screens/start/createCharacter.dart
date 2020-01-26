@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ghcharacter/screens/character.dart';
 import 'package:ghcharacter/utils/dbhelper.dart';
 import 'package:ghcharacter/models/character.dart';
-import 'package:ghcharacter/models/brute.dart';
 import 'package:ghcharacter/models/brute.dart';
 import 'package:ghcharacter/models/cragheart.dart';
 import 'package:ghcharacter/models/mindthief.dart';
@@ -79,132 +79,134 @@ class CreateCharacterState extends State {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            // Hero(
-                            //   tag: 'createHero',
-                            //   child: StartScreenWrapper(
-                            //     'Create ${this.playableClass}',
-                            //     'Enter name',
-                            //   ),
-                            // ),
-                            // Padding(
-                            //   padding: EdgeInsets.only(top: 0.0),
-                            //   child: TextField(
-                            //     controller: nameController,
-                            //   ),
-                            // ),
-                            Column(
-                              children: <Widget>[
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    SvgPicture.asset(
-                                      'assets/icons/classes/${playableClass.toLowerCase()}.svg',
-                                      color: Colors.white.withOpacity(0.5),
-                                      width: 50,
-                                      height: 50,
-                                    ),
-                                    Expanded(
-                                      child: TextField(
-                                        textInputAction: TextInputAction.done,
-                                        onSubmitted: (term) =>
-                                            createCharacter(),
-                                        autofocus: true,
-                                        cursorColor: Colors.white,
-                                        textAlign: TextAlign.center,
-                                        decoration: InputDecoration.collapsed(
-                                          hintText: 'Tap to set name',
-                                          hintStyle: TextStyle(
-                                              color: Colors.white
-                                                  .withOpacity(0.5)),
-                                        ),
-                                        controller: nameController,
-                                        style: TextStyle(
-                                            fontFamily: 'PirataOne',
-                                            fontSize: 30,
-                                            color: Colors.white,
-                                            decoration: TextDecoration.none),
+                            Hero(
+                              tag: 'characterHeader',
+                              child: Column(
+                                children: <Widget>[
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      SvgPicture.asset(
+                                        'assets/icons/classes/${playableClass.toLowerCase()}.svg',
+                                        color: Colors.white.withOpacity(0.5),
+                                        width: 50,
+                                        height: 50,
                                       ),
-                                    ),
-                                    Container(
-                                      width: 50,
-                                      height: 50,
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: Colors.white
-                                                  .withOpacity(0.3)),
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(50.0))),
-                                      child: Text(
-                                        '0',
-                                        style: TextStyle(
-                                            color:
-                                                Colors.white.withOpacity(0.5),
-                                            fontFamily: 'RobotoCondensed',
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 24),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: <Widget>[
-                                    Expanded(
-                                        child: Container(
-                                      color: Colors.white.withOpacity(0.3),
-                                      height: 1.0,
-                                    )),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          left: 5.0, right: 5.0),
-                                      child: Material(
-                                        color: Colors.transparent,
-                                        child: Text(
-                                          this.playableClass.toUpperCase(),
-                                          style: TextStyle(
-                                            fontFamily: 'RobotoCondensed',
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 16,
-                                            color:
-                                                Colors.white.withOpacity(0.5),
-                                            letterSpacing: 8,
+                                      Expanded(
+                                        child: Material(
+                                          color: Colors.transparent,
+                                          child: TextField(
+                                            textInputAction:
+                                                TextInputAction.done,
+                                            onSubmitted: (term) =>
+                                                createCharacter(),
+                                            autofocus: true,
+                                            cursorColor: Colors.white,
+                                            textAlign: TextAlign.center,
+                                            decoration:
+                                                InputDecoration.collapsed(
+                                              hintText: 'Tap to set name',
+                                              hintStyle: TextStyle(
+                                                  color: Colors.white
+                                                      .withOpacity(0.5)),
+                                            ),
+                                            controller: nameController,
+                                            style: TextStyle(
+                                                fontFamily: 'PirataOne',
+                                                fontSize: 30,
+                                                color: Colors.white,
+                                                decoration:
+                                                    TextDecoration.none),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                    Expanded(
-                                        child: Container(
-                                      color: Colors.white.withOpacity(0.3),
-                                      height: 1.0,
-                                    ))
-                                  ],
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      top: 20, left: 20, right: 20, bottom: 20),
-                                  child: Text(
-                                    this.getDescription(),
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'HighTower',
-                                      fontSize: 18,
-                                      height: 1.4,
+                                      Container(
+                                        width: 50,
+                                        height: 50,
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Colors.white
+                                                    .withOpacity(0.3)),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(50.0))),
+                                        child: Material(
+                                          color: Colors.transparent,
+                                          child: Text(
+                                            '0',
+                                            style: TextStyle(
+                                                color: Colors.white
+                                                    .withOpacity(0.5),
+                                                fontFamily: 'RobotoCondensed',
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 24),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                          child: Container(
+                                        color: Colors.white.withOpacity(0.3),
+                                        height: 1.0,
+                                      )),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 5.0, right: 5.0),
+                                        child: Material(
+                                          color: Colors.transparent,
+                                          child: Text(
+                                            this.playableClass.toUpperCase(),
+                                            style: TextStyle(
+                                              fontFamily: 'RobotoCondensed',
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 16,
+                                              color:
+                                                  Colors.white.withOpacity(0.5),
+                                              letterSpacing: 8,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                          child: Container(
+                                        color: Colors.white.withOpacity(0.3),
+                                        height: 1.0,
+                                      ))
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        top: 20,
+                                        left: 20,
+                                        right: 20,
+                                        bottom: 20),
+                                    child: Text(
+                                      this.getDescription(),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'HighTower',
+                                        fontSize: 18,
+                                        height: 1.4,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                // OutlineButton.icon(
-                                //   icon: Icon(Icons.add),
-                                //   textColor: Colors.white,
-                                //   borderSide: BorderSide(color: Colors.white),
-                                //   highlightedBorderColor: Colors.orangeAccent,
-                                //   label: Text('Create Character'),
-                                //   onPressed: () {
-                                //     this.createCharacter();
-                                //   },
-                                // ),
-                              ],
+                                  // OutlineButton.icon(
+                                  //   icon: Icon(Icons.add),
+                                  //   textColor: Colors.white,
+                                  //   borderSide: BorderSide(color: Colors.white),
+                                  //   highlightedBorderColor: Colors.orangeAccent,
+                                  //   label: Text('Create Character'),
+                                  //   onPressed: () {
+                                  //     this.createCharacter();
+                                  //   },
+                                  // ),
+                                ],
+                              ),
                             ),
                           ]),
                     ),
@@ -224,8 +226,17 @@ class CreateCharacterState extends State {
     if (this.nameController.text.length > 0) {
       final char = Character(this.nameController.text, this.playableClass);
 
-      dbHelper.insertCharacter(char).then((data) {
-        Navigator.pop(this.context, true);
+      dbHelper.insertCharacter(char).then((id) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CharacterScreen(
+              id,
+              this.playableClass,
+              this.nameController.text,
+            ),
+          ),
+        );
       });
     } else {
       this.alertNameMissing();
@@ -270,5 +281,4 @@ class CreateCharacterState extends State {
       },
     );
   }
-
 }

@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:ghcharacter/models/character.dart';
+import 'package:ghcharacter/screens/character.dart';
 import 'package:ghcharacter/screens/start/createCharacter.dart';
 import 'package:ghcharacter/screens/start/startScreenWrapper.dart';
 import 'package:ghcharacter/utils/dbhelper.dart';
@@ -20,6 +21,8 @@ class StartScreenState extends State {
 
   String bgUrl = 'assets/images/box-art-cropped.jpg';
 
+  int currentPage = 0;
+
   int count = 0;
   List<Character> characters = [];
 
@@ -32,6 +35,7 @@ class StartScreenState extends State {
     if (!initialized) {
       this.init();
     }
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: Container(
@@ -80,6 +84,7 @@ class StartScreenState extends State {
                     child: PageView(
                       controller: this.pageViewController,
                       scrollDirection: Axis.horizontal,
+                      onPageChanged: this.onPageChanged,
                       pageSnapping: true,
                       children: <Widget>[
                         this.renderCharacterCreation(),
@@ -95,76 +100,76 @@ class StartScreenState extends State {
                               itemBuilder: (BuildContext context, int index) {
                                 return Padding(
                                   padding: EdgeInsets.all(10.0),
-                                  child: Row(
-                                    children: [
-                                      SvgPicture.asset(
-                                          'assets/icons/classes/${this.characters[index].playableClass.toShortString().toLowerCase()}.svg'),
-                                      Expanded(
-                                        child: Container(
-                                          margin: EdgeInsets.only(left: 10.0),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                this.characters[index].name,
-                                                style: TextStyle(
-                                                    fontFamily:
-                                                        'RobotoCondensed',
-                                                    color: Colors.white,
-                                                    fontSize: 22),
-                                              ),
-                                              Text(
-                                                'Level ${this.characters[index].level.toString()} ${this.characters[index].playableClass.toShortString()}',
-                                                style: TextStyle(
-                                                    fontFamily: 'Roboto',
-                                                    color: Colors.white
-                                                        .withOpacity(0.75),
-                                                    fontSize: 14),
-                                              ),
-                                            ],
-                                          ),
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => CharacterScreen(
+                                              this.characters[index].id,
+                                              this
+                                                  .characters[index]
+                                                  .playableClass
+                                                  .toShortString(),
+                                              this.characters[index].name),
                                         ),
-                                      ),
-                                      Material(
-                                        color: Colors.transparent,
-                                        child: Center(
-                                          child: Ink(
-                                            child: IconButton(
-                                              icon: Icon(Icons.delete),
-                                              color: Colors.white,
-                                              onPressed: () {
-                                                this.deleteCharacter(
-                                                    this.characters[index],
-                                                    index);
-                                              },
+                                      );
+                                    },
+                                    highlightColor: Colors.deepOrange,
+                                    child: Row(
+                                      children: [
+                                        SvgPicture.asset(
+                                            'assets/icons/classes/${this.characters[index].playableClass.toShortString().toLowerCase()}.svg'),
+                                        Expanded(
+                                          child: Container(
+                                            margin: EdgeInsets.only(left: 10.0),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  this.characters[index].name,
+                                                  style: TextStyle(
+                                                      fontFamily:
+                                                          'RobotoCondensed',
+                                                      color: Colors.white,
+                                                      fontSize: 22),
+                                                ),
+                                                Text(
+                                                  'Level ${this.characters[index].level.toString()} ${this.characters[index].playableClass.toShortString()}',
+                                                  style: TextStyle(
+                                                      fontFamily: 'Roboto',
+                                                      color: Colors.white
+                                                          .withOpacity(0.75),
+                                                      fontSize: 14),
+                                                ),
+                                              ],
                                             ),
                                           ),
                                         ),
-                                      )
-                                    ],
+                                        Material(
+                                          color: Colors.transparent,
+                                          child: Center(
+                                            child: Ink(
+                                              child: IconButton(
+                                                icon: Icon(Icons.delete),
+                                                color: Colors.white,
+                                                onPressed: () {
+                                                  this.deleteCharacter(
+                                                      this.characters[index],
+                                                      index);
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 );
                               },
                             ),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(
-                                Icons.keyboard_arrow_left,
-                                color: Colors.white.withOpacity(0.5),
-                                size: 18,
-                              ),
-                              Text(
-                                'create new character',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.white.withOpacity(0.5),
-                                ),
-                              ),
-                            ],
-                          )
                         ]),
                       ],
                     ),
@@ -172,6 +177,19 @@ class StartScreenState extends State {
                 ]),
           ),
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.transparent,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+              icon: Icon(Icons.add_circle), title: Text('Create')),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.list), title: Text('Characters')),
+        ],
+        currentIndex: this.currentPage,
+        unselectedItemColor: Colors.white,
+        selectedItemColor: Colors.amber[800],
+        onTap: this.onNavItemTapped,
       ),
     );
   }
@@ -195,7 +213,8 @@ class StartScreenState extends State {
             return Character.fromObject(characterData);
           }).toList();
         });
-        this.pageViewController.animateToPage(1,
+        this.currentPage = 1;
+        this.pageViewController.animateToPage(this.currentPage,
             duration: Duration(milliseconds: 500), curve: Curves.ease);
       }
     });
@@ -256,23 +275,6 @@ class StartScreenState extends State {
         ),
       ),
       Expanded(child: ListView(children: createCharacterWidget)),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            'your characters',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.white.withOpacity(0.5),
-            ),
-          ),
-          Icon(
-            Icons.keyboard_arrow_right,
-            color: Colors.white.withOpacity(0.5),
-            size: 18,
-          )
-        ],
-      )
     ];
 
     final content = Column(children: creationList);
@@ -295,6 +297,21 @@ class StartScreenState extends State {
     if (res) {
       this.getCharacters();
     }
+  }
+
+  onNavItemTapped(int index) {
+    setState(() {
+      this.currentPage = index;
+    });
+
+    this.pageViewController.animateToPage(index,
+        duration: Duration(milliseconds: 500), curve: Curves.ease);
+  }
+
+  onPageChanged(int page) {
+    setState(() {
+      this.currentPage = page;
+    });
   }
 
   Future<bool> confirmDelete(Character character) async {

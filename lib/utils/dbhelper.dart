@@ -78,6 +78,12 @@ class DbHelper {
     return result;
   }
 
+  Future<List> getCharacter(id) async {
+    Database db = await this.db;
+    var result = await db.rawQuery("SELECT * FROM $tblCharacter WHERE $colId = $id");
+    return result;
+  }
+
   Future<int> deleteCharacter(int id) async {
     int result;
     var db = await this.db;
