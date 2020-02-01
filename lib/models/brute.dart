@@ -47,19 +47,7 @@ class Brute extends Character {
       xpBase: 45, 
       levelUpDifficulty: 5, 
       battleGoals: battleGoals
-  ) {
-    if (this.hitpoints == null) {
-      this.hitpoints = this.maxHp;
-    }
-  }
-
-  int get maxHp {
-    if (this.level == 1) {
-      return 10;
-    } else {
-      return 8 + this.level * 2;
-    }
-  }
+  );
 
   // TODO handle this logic after building
   // attack modifier deck logic

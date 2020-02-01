@@ -17,7 +17,7 @@ class Character {
     this.name, 
     String _playableClass, 
     {
-      this.hitpoints: 0,
+      this.hitpoints,
       this.xp: 0,
       this.gold: 0,
       this.xpBase, 
@@ -25,14 +25,17 @@ class Character {
       this.battleGoals,
       this.initiative
     }
-  ) { playableClass = getPlayableClass(_playableClass); }
+  ) { 
+    playableClass = getPlayableClass(_playableClass);
+    this.hitpoints = this.maxHp;
+  }
 
   Character.withId(
     this.id,
     this.name, 
     String _playableClass, 
     {
-      this.hitpoints: 0,
+      this.hitpoints,
       this.xp: 0,
       this.gold: 0,
       this.xpBase, 
@@ -40,7 +43,12 @@ class Character {
       this.battleGoals,
       this.initiative
     }
-  ) { playableClass = getPlayableClass(_playableClass); }
+  ) { 
+    this.playableClass = getPlayableClass(_playableClass);
+    if (this.hitpoints == null) {
+      this.hitpoints = this.maxHp;
+    }
+  }
 
   Character.fromObject(dynamic o) {
     this.id = o["id"];
@@ -86,6 +94,16 @@ class Character {
     }
 
     return level;
+  }
+
+  
+  int get maxHp {
+    // TODO change formula to work per class
+    if (this.level == 1) {
+      return 10;
+    } else {
+      return 8 + this.level * 2;
+    }
   }
 
   String get icon {

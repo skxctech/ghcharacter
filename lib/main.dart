@@ -13,7 +13,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         fontFamily: 'Roboto',
-        accentColor: Colors.deepOrange
+        accentColor: Colors.deepOrange,
+        textTheme: TextTheme(
+          body1: TextStyle(color: Colors.white)
+        )
       ),
       home: StartScreen(),
     );
