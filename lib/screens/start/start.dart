@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:ghcharacter/models/character.dart';
-import 'package:ghcharacter/screens/character.dart';
+import 'package:ghcharacter/screens/character/character.dart';
 import 'package:ghcharacter/screens/start/createCharacter.dart';
 import 'package:ghcharacter/screens/start/startScreenWrapper.dart';
 import 'package:ghcharacter/utils/dbhelper.dart';

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ghcharacter/helpers/character.helper.dart';
+import 'package:ghcharacter/screens/character/experienceManager.dart';
+import 'package:ghcharacter/screens/character/hitpointManager.dart';
 import 'package:ghcharacter/utils/dbhelper.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:ghcharacter/models/character.dart';
 import 'package:ghcharacter/enums/playableClass.dart';
 
@@ -120,7 +121,7 @@ class CharacterScreenState extends State {
                             child: Material(
                               color: Colors.transparent,
                               child: Text(
-                                '0',
+                                this.character.level.toString(),
                                 style: TextStyle(
                                     color: Colors.white.withOpacity(0.5),
                                     fontFamily: 'RobotoCondensed',
@@ -164,98 +165,12 @@ class CharacterScreenState extends State {
                     ],
                   ),
                 ),
+                if (this.character != null)
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(right: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: <Widget>[
-                                Expanded(
-                                  child: Text(
-                                    'Health',
-                                    style: TextStyle(
-                                      fontFamily: 'RobotoCondensed',
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                ),
-                                Row(
-                                  children: <Widget>[
-                                    Text(
-                                      this.hitpoints.toString(),
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                      ),
-                                    ),
-                                    Text(
-                                      '/',
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                      ),
-                                    ),
-                                    Text(
-                                      this.maxHp.toString(),
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                      ),
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                            FractionallySizedBox(
-                              widthFactor: 1.0,
-                              child: Container(
-                                margin: EdgeInsets.only(top: 10),
-                                height: 10,
-                                color: Colors.red.shade900,
-                                child: FractionallySizedBox(
-                                  widthFactor: this.healthPercentage,
-                                  alignment: Alignment.centerLeft,
-                                  child: Container(
-                                    height: 10,
-                                    color: Colors.red,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Row(
-                              children: <Widget>[
-                                Expanded(
-                                  child: IconButton(
-                                    icon: Icon(Icons.remove_circle_outline),
-                                    color: Colors.red,
-                                    tooltip: 'Remove hitpoint',
-                                    onPressed: this.removeHitpoint,
-                                  ),
-                                ),
-                                Expanded(
-                                  child: IconButton(
-                                    icon: Icon(Icons.add_circle_outline),
-                                    color: Colors.red,
-                                    tooltip: 'Add hitpoint',
-                                    onPressed: this.addHitpoint,
-                                  ),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 10),
-                        child: Text('222'),
-                      ),
-                    )
+                    HitpointManager(this.character),
+                    ExperienceManager(this.character),
                   ],
                 )
               ]),
@@ -274,46 +189,6 @@ class CharacterScreenState extends State {
             this.playableClass, characterData[0]);
       });
     });
-  }
-
-  double get healthPercentage {
-    if (this.character != null) {
-      return this.character.hitpoints / this.character.maxHp;
-    } else {
-      return 0;
-    }
-  }
-
-  get hitpoints {
-    if (this.character != null) {
-      return this.character.hitpoints;
-    } else {
-      return 0;
-    }
-  }
-
-  get maxHp {
-    if (this.character != null) {
-      return this.character.maxHp;
-    } else {
-      return 0;
-    }
-  }
-
-  addHitpoint() {
-    if (this.character.hitpoints < this.character.maxHp) {
-      setState(() {
-        this.character.hitpoints++;
-      });
-    }
-  }
-
-  removeHitpoint() {
-    if (this.character.hitpoints > 0) {
-      setState(() {
-        this.character.hitpoints--;
-      });
-    }
   }
 
   scopePop() {

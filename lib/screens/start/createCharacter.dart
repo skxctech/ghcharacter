@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:ghcharacter/screens/character.dart';
+import 'package:ghcharacter/screens/character/character.dart';
 import 'package:ghcharacter/utils/dbhelper.dart';
 import 'package:ghcharacter/models/character.dart';
 import 'package:ghcharacter/helpers/character.helper.dart';

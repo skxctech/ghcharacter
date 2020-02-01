@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:ghcharacter/enums/playableClass.dart';
 import 'package:ghcharacter/models/brute.dart';
 
@@ -94,6 +95,18 @@ class Character {
     }
 
     return level;
+  }
+
+  int get xpStep {
+    num baseDifficulty = 0;
+    num xpSum = 0;
+
+    while (xpSum <= this.xp) {
+      xpSum += xpBase + baseDifficulty;
+      baseDifficulty += this.levelUpDifficulty;
+    }
+
+    return xpSum;
   }
 
   
