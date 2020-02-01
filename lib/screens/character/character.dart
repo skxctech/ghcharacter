@@ -121,7 +121,7 @@ class CharacterScreenState extends State {
                             child: Material(
                               color: Colors.transparent,
                               child: Text(
-                                this.character.level.toString(),
+                                this.level,
                                 style: TextStyle(
                                     color: Colors.white.withOpacity(0.5),
                                     fontFamily: 'RobotoCondensed',
@@ -179,6 +179,10 @@ class CharacterScreenState extends State {
         ),
       ),
     );
+  }
+
+  String get level {
+    return this.character != null ? this.character.level.toString() : '0';
   }
 
   getData() {
