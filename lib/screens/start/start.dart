@@ -109,8 +109,7 @@ class StartScreenState extends State {
                                               this.characters[index].id,
                                               this
                                                   .characters[index]
-                                                  .playableClass
-                                                  .toShortString(),
+                                                  .playableClass,
                                               this.characters[index].name),
                                         ),
                                       );
@@ -221,21 +220,13 @@ class StartScreenState extends State {
   }
 
   renderCharacterCreation() {
-    List<String> playableClasses = [
-      'Brute',
-      'Cragheart',
-      'Mindthief',
-      'Scoundrel',
-      'Spellweaver',
-      'Tinkerer'
-    ];
 
-    List<Widget> createCharacterWidget = playableClasses.map((className) {
+    List<Widget> createCharacterWidget = PlayableClass.values.map((playableClass) {
       return Material(
         color: Colors.black.withOpacity(0),
         child: InkWell(
           onTap: () {
-            this.openCreateScreen(className);
+            this.openCreateScreen(playableClass);
           },
           highlightColor: Colors.deepOrange,
           child: Padding(
@@ -243,14 +234,14 @@ class StartScreenState extends State {
             child: Row(
               children: [
                 SvgPicture.asset(
-                    'assets/icons/classes/${className.toLowerCase()}.svg'),
+                    'assets/icons/classes/${playableClass.toShortString().toLowerCase()}.svg'),
                 Container(
                   margin: EdgeInsets.only(left: 10.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        className,
+                        playableClass.toShortString(),
                         style: TextStyle(
                             fontFamily: 'RobotoCondensed',
                             color: Colors.white,
@@ -290,9 +281,9 @@ class StartScreenState extends State {
     }
   }
 
-  openCreateScreen(String className) async {
+  openCreateScreen(PlayableClass playableClass) async {
     final res = await Navigator.push(context,
-        MaterialPageRoute(builder: (context) => CreateCharacter(className)));
+        MaterialPageRoute(builder: (context) => CreateCharacter(playableClass)));
 
     if (res) {
       this.getCharacters();

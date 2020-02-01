@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ghcharacter/helpers/character.helper.dart';
 import 'package:ghcharacter/utils/dbhelper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:ghcharacter/models/character.dart';
@@ -9,7 +10,7 @@ DbHelper dbHelper = DbHelper();
 
 class CharacterScreen extends StatefulWidget {
   final int characterId;
-  final String playableClass;
+  final PlayableClass playableClass;
   final String name;
   CharacterScreen(this.characterId, this.playableClass, this.name);
 
@@ -20,7 +21,7 @@ class CharacterScreen extends StatefulWidget {
 
 class CharacterScreenState extends State {
   final int characterId;
-  final String playableClass;
+  final PlayableClass playableClass;
   final String name;
   CharacterScreenState(this.characterId, this.playableClass, this.name);
 
@@ -29,11 +30,11 @@ class CharacterScreenState extends State {
   bool initialized = false;
 
   get backgroundUrl {
-    return 'assets/images/${playableClass.toLowerCase()}.jpg';
+    return 'assets/images/${playableClass.toShortString().toLowerCase()}.jpg';
   }
 
   get iconUrl {
-    return 'assets/icons/classes/${playableClass.toLowerCase()}.svg';
+    return 'assets/icons/classes/${playableClass.toShortString().toLowerCase()}.svg';
   }
 
   @override
@@ -42,7 +43,11 @@ class CharacterScreenState extends State {
       this.getData();
     }
 
-    return Container(
+    //return WillPopScope(
+
+    return WillPopScope(
+      onWillPop: () => scopePop(),
+      child: Container(
       constraints: BoxConstraints.expand(),
       decoration: BoxDecoration(
         image: DecorationImage(
@@ -138,7 +143,7 @@ class CharacterScreenState extends State {
                           child: Material(
                             color: Colors.transparent,
                             child: Text(
-                              playableClass.toUpperCase(),
+                              playableClass.toShortString().toUpperCase(),
                               style: TextStyle(
                                 fontFamily: 'RobotoCondensed',
                                 fontWeight: FontWeight.w700,
@@ -163,15 +168,21 @@ class CharacterScreenState extends State {
           ),
         ),
       ),
-    );
+    ),);
   }
 
   getData() {
     this.initialized = true;
     dbHelper.getCharacter(this.characterId).then((characterData) {
       setState(() {
-        this.character = Character.fromObject(characterData[0]);
+        this.character = CharacterHelper.getCharacterInstance(this.playableClass, characterData[0]);
       });
     });
   }
+
+  scopePop() {
+    Navigator.of(context)
+    .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+  }
+
 }

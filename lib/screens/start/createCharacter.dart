@@ -3,17 +3,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ghcharacter/screens/character.dart';
 import 'package:ghcharacter/utils/dbhelper.dart';
 import 'package:ghcharacter/models/character.dart';
-import 'package:ghcharacter/models/brute.dart';
-import 'package:ghcharacter/models/cragheart.dart';
-import 'package:ghcharacter/models/mindthief.dart';
-import 'package:ghcharacter/models/scoundrel.dart';
-import 'package:ghcharacter/models/spellweaver.dart';
-import 'package:ghcharacter/models/tinkerer.dart';
+import 'package:ghcharacter/helpers/character.helper.dart';
+import 'package:ghcharacter/enums/playableClass.dart';
 
 DbHelper dbHelper = DbHelper();
 
 class CreateCharacter extends StatefulWidget {
-  final String playableClass;
+  final PlayableClass playableClass;
   CreateCharacter(this.playableClass);
 
   @override
@@ -21,7 +17,7 @@ class CreateCharacter extends StatefulWidget {
 }
 
 class CreateCharacterState extends State {
-  String playableClass;
+  PlayableClass playableClass;
   CreateCharacterState(this.playableClass);
 
   TextEditingController nameController = TextEditingController();
@@ -35,7 +31,7 @@ class CreateCharacterState extends State {
         decoration: BoxDecoration(
           image: DecorationImage(
             image:
-                AssetImage('assets/images/${playableClass.toLowerCase()}.jpg'),
+                AssetImage('assets/images/${playableClass.toShortString().toLowerCase()}.jpg'),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
               Colors.black.withOpacity(0.33),
@@ -88,7 +84,7 @@ class CreateCharacterState extends State {
                                         MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                                       SvgPicture.asset(
-                                        'assets/icons/classes/${playableClass.toLowerCase()}.svg',
+                                        'assets/icons/classes/${playableClass.toShortString().toLowerCase()}.svg',
                                         color: Colors.white.withOpacity(0.5),
                                         width: 50,
                                         height: 50,
@@ -159,7 +155,7 @@ class CreateCharacterState extends State {
                                         child: Material(
                                           color: Colors.transparent,
                                           child: Text(
-                                            this.playableClass.toUpperCase(),
+                                            this.playableClass.toShortString().toUpperCase(),
                                             style: TextStyle(
                                               fontFamily: 'RobotoCondensed',
                                               fontWeight: FontWeight.w700,
@@ -185,7 +181,7 @@ class CreateCharacterState extends State {
                                         right: 20,
                                         bottom: 20),
                                     child: Text(
-                                      this.getDescription(),
+                                      CharacterHelper.getCharacterDescription(this.playableClass),
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         color: Colors.white,
@@ -224,7 +220,7 @@ class CreateCharacterState extends State {
 
   createCharacter() {
     if (this.nameController.text.length > 0) {
-      final char = Character(this.nameController.text, this.playableClass);
+      final char = Character(this.nameController.text, this.playableClass.toShortString());
 
       dbHelper.insertCharacter(char).then((id) {
         Navigator.push(
@@ -240,25 +236,6 @@ class CreateCharacterState extends State {
       });
     } else {
       this.alertNameMissing();
-    }
-  }
-
-  getDescription() {
-    switch (this.playableClass) {
-      case 'Brute':
-        return Brute.description;
-      case 'Cragheart':
-        return Cragheart.description;
-      case 'Mindthief':
-        return Mindthief.description;
-      case 'Scoundrel':
-        return Scoundrel.description;
-      case 'Spellweaver':
-        return Spellweaver.description;
-      case 'Tinkerer':
-        return Tinkerer.description;
-      default:
-        return 'Class description not found';
     }
   }
 
