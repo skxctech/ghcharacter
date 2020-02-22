@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:ghcharacter/models/character.dart';
+import 'package:get_it/get_it.dart';
+import 'package:ghcharacter/services/state.dart';
+
+GetIt getIt = GetIt.instance;
 
 class ExperienceManager extends StatefulWidget {
   final Character character;
@@ -11,6 +15,9 @@ class ExperienceManager extends StatefulWidget {
 }
 
 class ExperienceManagerState extends State {
+
+  final ghStateService = getIt.get<GHState>();
+
   Character character;
 
   ExperienceManagerState(this.character);
@@ -117,5 +124,6 @@ class ExperienceManagerState extends State {
     setState(() {
       this.character.xp += 5;
     });
+    ghStateService.setLevel(this.character.level);
   }
 }

@@ -219,6 +219,7 @@ class CreateCharacterState extends State {
   }
 
   createCharacter() {
+
     if (this.nameController.text.length > 0) {
       final char = Character(this.nameController.text, this.playableClass.toShortString());
 

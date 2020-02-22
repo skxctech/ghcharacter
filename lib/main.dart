@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:ghcharacter/screens/start/start.dart';
+import 'package:get_it/get_it.dart';
+import 'package:ghcharacter/services/state.dart';
 
-void main() => runApp(MyApp());
+GetIt getIt = GetIt.instance;
+
+void main() {
+  getIt.registerSingleton<GHState>(GHState());
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
 

@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:ghcharacter/enums/playableClass.dart';
-import 'package:ghcharacter/models/brute.dart';
 
 class Character {
   int id;
@@ -87,6 +85,10 @@ class Character {
     num baseDifficulty = 0;
     num level = 0;
     num xpSum = 0;
+
+    if (this.xp == 0) {
+      return 1;
+    }
 
     while (xpSum <= this.xp) {
       xpSum += xpBase + baseDifficulty;

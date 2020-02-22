@@ -3,9 +3,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ghcharacter/helpers/character.helper.dart';
 import 'package:ghcharacter/screens/character/experienceManager.dart';
 import 'package:ghcharacter/screens/character/hitpointManager.dart';
+import 'package:ghcharacter/services/state.dart';
 import 'package:ghcharacter/utils/dbhelper.dart';
 import 'package:ghcharacter/models/character.dart';
 import 'package:ghcharacter/enums/playableClass.dart';
+import 'package:get_it/get_it.dart';
+
+GetIt getIt = GetIt.instance;
 
 DbHelper dbHelper = DbHelper();
 
@@ -13,6 +17,7 @@ class CharacterScreen extends StatefulWidget {
   final int characterId;
   final PlayableClass playableClass;
   final String name;
+
   CharacterScreen(this.characterId, this.playableClass, this.name);
 
   @override
@@ -24,6 +29,9 @@ class CharacterScreenState extends State {
   final int characterId;
   final PlayableClass playableClass;
   final String name;
+
+  final ghStateService = getIt.get<GHState>();
+
   CharacterScreenState(this.characterId, this.playableClass, this.name);
 
   Character character;
@@ -120,14 +128,19 @@ class CharacterScreenState extends State {
                                     BorderRadius.all(Radius.circular(50.0))),
                             child: Material(
                               color: Colors.transparent,
-                              child: Text(
-                                this.level,
-                                style: TextStyle(
-                                    color: Colors.white.withOpacity(0.5),
-                                    fontFamily: 'RobotoCondensed',
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 24),
-                              ),
+                              child: StreamBuilder(
+                                  stream: ghStateService.level$,
+                                  initialData: 0,
+                                  builder: (context, snapshot) {
+                                    return Text(
+                                      snapshot.data.toString(),
+                                      style: TextStyle(
+                                          color: Colors.white.withOpacity(0.5),
+                                          fontFamily: 'RobotoCondensed',
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 24),
+                                    );
+                                  }),
                             ),
                           ),
                         ],
@@ -166,13 +179,13 @@ class CharacterScreenState extends State {
                   ),
                 ),
                 if (this.character != null)
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    HitpointManager(this.character),
-                    ExperienceManager(this.character),
-                  ],
-                )
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      HitpointManager(this.character),
+                      ExperienceManager(this.character),
+                    ],
+                  )
               ]),
             ),
           ),
